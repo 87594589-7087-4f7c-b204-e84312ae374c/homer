@@ -1,15 +1,7 @@
-FROM alpine:3.11
+FROM busybox
 
 COPY ./ /www/
 
-ENV USER darkhttpd
-ENV GROUP darkhttpd
-ENV GID 911
-ENV UID 911
+EXPOSE 8080/tcp
 
-RUN addgroup -S ${GROUP} -g ${GID} && adduser -D -S -u ${UID} ${USER} ${GROUP} && \
-    apk add -U darkhttpd
-
-USER darkhttpd
-
-ENTRYPOINT ["darkhttpd","/www/", "--no-listing"]
+ENTRYPOINT [ "httpd", "-f", "-v", "-u", "1000", "-h", "/www", "-p", "8080" ]
